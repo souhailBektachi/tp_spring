@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion des Patients</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+</head>
+<body>
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">Liste des Patients</h3>
+            <span class="badge bg-light text-primary" th:text="${listPatients.size() + ' Patients'}"></span>
+        </div>
+        <div class="card-body">
+            <form method="get" th:action="@{index}" class="mb-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="keyword" th:value="${keyword}" 
+                           placeholder="Rechercher par nom...">
+                    <button class="btn btn-outline-primary" type="submit">
+                        <i class="bi bi-search"></i> Chercher
+                    </button>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Date Naissance</th>
+                        <th>État</th>
+                        <th>Score</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="p:${listPatients}">
+                        <td th:text="${p.id}"></td>
+                        <td th:text="${p.nom}"></td>
+                        <td th:text="${#dates.format(p.dateNaissance, 'dd-MM-yyyy')}"></td>
+                        <td>
+                            <span th:class="${p.malade ? 'badge bg-danger' : 'badge bg-success'}"
+                                  th:text="${p.malade ? 'Malade' : 'Sain'}">
+                            </span>
+                        </td>
+                        <td>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar" role="progressbar" 
+                                     th:style="'width: ' + ${p.score} + '%'"
+                                     th:text="${p.score} + '%'">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div th:if="${totalPages > 1}" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{index(page=${currentPage-1}, keyword=${keyword})}">&laquo;</a>
+                    </li>
+                    <li th:each="page,status:${pages}" class="page-item" 
+                        th:classappend="${status.index==currentPage ? 'active' : ''}">
+                        <a class="page-link" th:text="${status.index + 1}"
+                           th:href="@{index(page=${status.index}, keyword=${keyword})}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''">
+                        <a class="page-link" th:href="@{index(page=${currentPage+1}, keyword=${keyword})}">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
