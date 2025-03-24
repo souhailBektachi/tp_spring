@@ -3,15 +3,16 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{template}">
 <head>
-    <title>Nouveau Patient</title>
+    <title th:text="${edit} ? 'Modifier Patient' : 'Nouveau Patient'"></title>
 </head>
 <body>
 <div layout:fragment="content">
     <div class="col-md-6 offset-md-3">
         <div class="card">
-            <div class="card-header">Nouveau Patient</div>
+            <div class="card-header" th:text="${edit} ? 'Modifier Patient' : 'Nouveau Patient'"></div>
             <div class="card-body">
-                <form method="post" th:action="@{save}" th:object="${patient}">
+                <form method="post" th:action="@{/save}" th:object="${patient}">
+                    <input type="hidden" th:field="*{id}" th:if="${edit}">
                     <div class="mb-3">
                         <label class="form-label">Nom</label>
                         <input class="form-control" type="text" th:field="*{nom}">
@@ -34,7 +35,13 @@
                         <input class="form-control" type="number" th:field="*{score}">
                         <span class="text-danger" th:errors="*{score}"></span>
                     </div>
-                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> 
+                        <span th:text="${edit} ? 'Mettre à jour' : 'Enregistrer'"></span>
+                    </button>
+                    <a class="btn btn-secondary" th:href="@{/index}">
+                        <i class="bi bi-arrow-left"></i> Annuler
+                    </a>
                 </form>
             </div>
         </div>

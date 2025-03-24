@@ -54,11 +54,16 @@
                                 </div>
                             </td>
                             <td>
-                                <a onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce patient?')" 
-                                   class="btn btn-danger btn-sm" 
-                                   th:href="@{delete/{id}(id=${p.id}, keyword=${keyword}, page=${currentPage})}">
-                                    <i class="bi bi-trash"></i> Supprimer
-                                </a>
+                                <div class="btn-group">
+                                    <a class="btn btn-primary btn-sm" th:href="@{editPatient/{id}(id=${p.id})}">
+                                        <i class="bi bi-pencil"></i> Modifier
+                                    </a>
+                                    <a onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce patient?')" 
+                                       class="btn btn-danger btn-sm" 
+                                       th:href="@{delete/{id}(id=${p.id}, keyword=${keyword}, page=${currentPage})}">
+                                        <i class="bi bi-trash"></i> Supprimer
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         </tbody>

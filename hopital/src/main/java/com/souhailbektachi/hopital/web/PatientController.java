@@ -38,6 +38,7 @@ public class PatientController {
     @GetMapping("/formPatient")
     public String formPatient(Model model) {
         model.addAttribute("patient", new Patient());
+        model.addAttribute("edit", false);
         return "formPatient";
     }
 
@@ -56,5 +57,16 @@ public class PatientController {
                                @RequestParam(name = "page", defaultValue = "0") int page) {
         patientRepository.deleteById(id);
         return "redirect:/index?page=" + page + "&keyword=" + keyword;
+    }
+
+    @GetMapping("/editPatient/{id}")
+    public String editPatient(@PathVariable Long id, Model model) {
+        Patient patient = patientRepository.findById(id).orElse(null);
+        if (patient == null) {
+            return "redirect:/index";
+        }
+        model.addAttribute("patient", patient);
+        model.addAttribute("edit", true);
+        return "formPatient";
     }
 }
