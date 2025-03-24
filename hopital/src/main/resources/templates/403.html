@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{template}">
+<head>
+    <title>Accès Refusé</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container mt-5">
+        <div class="card border-danger">
+            <div class="card-body text-center">
+                <h3 class="card-title text-danger">
+                    <i class="bi bi-exclamation-triangle-fill"></i> 
+                    Accès Refusé
+                </h3>
+                <p class="card-text">
+                    Désolé, vous n'avez pas les permissions nécessaires pour accéder à cette ressource.
+                </p>
+                <a th:href="@{/index}" class="btn btn-primary">
+                    <i class="bi bi-house"></i> Retour à l'accueil
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
