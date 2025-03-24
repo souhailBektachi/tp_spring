@@ -32,6 +32,7 @@
                             <th>Date Naissance</th>
                             <th>État</th>
                             <th>Score</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -51,6 +52,13 @@
                                          th:text="${p.score} + '%'">
                                     </div>
                                 </div>
+                            </td>
+                            <td>
+                                <a onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce patient?')" 
+                                   class="btn btn-danger btn-sm" 
+                                   th:href="@{delete/{id}(id=${p.id}, keyword=${keyword}, page=${currentPage})}">
+                                    <i class="bi bi-trash"></i> Supprimer
+                                </a>
                             </td>
                         </tr>
                         </tbody>
