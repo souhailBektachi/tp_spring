@@ -1,0 +1,117 @@
+<div class="login-container">
+  <div class="login-card-container">
+    <mat-card class="login-card">
+
+      <!-- Header Section -->
+      <mat-card-header class="login-header">
+        <div mat-card-avatar class="login-icon">
+          <mat-icon>account_balance</mat-icon>
+        </div>
+        <mat-card-title class="login-title">Digital Banking</mat-card-title>
+        <mat-card-subtitle class="login-subtitle">Secure Access to Your Account</mat-card-subtitle>
+      </mat-card-header>
+
+      <!-- Content Section -->
+      <mat-card-content class="login-content">
+
+        <!-- Error Message Display -->
+        <div class="error-message" *ngIf="errorMessage">
+          <mat-icon color="warn">error</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <!-- Login Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+          <!-- Email Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              formControlName="email"
+              placeholder="Enter your email"
+              type="text"
+              autocomplete="email"
+              [class.is-invalid]="hasFieldError('email')" />
+            <mat-icon matSuffix>mail</mat-icon>
+            <mat-error *ngIf="hasFieldError('email')">
+              {{ getFieldErrorMessage('email') }}
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Password Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              [type]="hidePassword ? 'password' : 'text'"
+              formControlName="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              [class.is-invalid]="hasFieldError('password')">
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hidePassword"
+              type="button">
+              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="hasFieldError('password')">
+              {{ getFieldErrorMessage('password') }}
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Remember Me Checkbox -->
+          <div class="remember-me-container">
+            <mat-checkbox formControlName="rememberMe" color="primary">
+              Remember me on this device
+            </mat-checkbox>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="login-actions">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              class="login-button full-width"
+              [disabled]="isLoading">
+              <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+              <span *ngIf="!isLoading">Sign In</span>
+              <span *ngIf="isLoading">Signing In...</span>
+            </button>
+          </div>
+
+        </form>
+
+      </mat-card-content>
+
+      <!-- Actions Section -->
+      <mat-card-actions class="login-card-actions">
+        <div class="forgot-password">
+          <button mat-button color="accent" (click)="onForgotPassword()" type="button">
+            Forgot Password?
+          </button>
+        </div>
+      </mat-card-actions>
+
+    </mat-card>
+
+    <!-- Footer Information -->
+    <div class="login-footer">
+      <div class="security-info">
+        <mat-icon>security</mat-icon>
+        <span>Your connection is secure and encrypted</span>
+      </div>
+      <div class="help-info">
+        <span>Need help? Contact our support team</span>
+        <button mat-button color="accent">
+          <mat-icon>help</mat-icon>
+          Support
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

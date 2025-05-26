@@ -1,0 +1,71 @@
+spring:
+  application:
+    name: Digital Banking
+  
+  datasource:
+    url: jdbc:mysql://localhost:3306/ebanking_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: user
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # Changed from 'update' to 'create-drop' for development
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        use_sql_comments: true
+        generate_statistics: false
+    open-in-view: false
+  
+  sql:
+    init:
+      mode: never
+
+# Add springdoc configuration to application.yml
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    csrf:
+      enabled: false
+  pathsToMatch: /**
+
+# JWT Configuration (matching JwtService expectations)
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 86400000 # 1 day
+      refresh-token:
+        expiration: 604800000 # 7 days
+
+logging:
+  level:
+    com.glsid.digital_banking: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.security: DEBUG
+    # Add this to see security debug logs
+    org.springframework.security.web.FilterChainProxy: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+server:
+  port: 8083  # Changed from 8080 to 8083
+  servlet:
+    context-path: /api
+  error:
+    include-message: always
+    include-binding-errors: always

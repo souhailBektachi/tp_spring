@@ -14,9 +14,8 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @Slf4j
-@RequestMapping("/api/customers")
+@RequestMapping("/customers")
 @Tag(name = "Customer Management")
-@CrossOrigin("*")
 public class CustomerRestController {
     private BankAccountService bankAccountService;
 

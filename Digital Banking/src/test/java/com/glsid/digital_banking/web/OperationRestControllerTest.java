@@ -12,17 +12,21 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(OperationRestController.class)
+@Import(TestSecurityConfig.class)
 public class OperationRestControllerTest {
 
     @Autowired
@@ -35,6 +39,7 @@ public class OperationRestControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
+    @WithMockUser
     public void shouldDebitAccount() throws Exception {
         DebitDTO debitDTO = new DebitDTO();
         debitDTO.setAccountId("ca-123");
@@ -44,6 +49,7 @@ public class OperationRestControllerTest {
         doNothing().when(bankAccountService).debit(anyString(), anyDouble(), anyString());
 
         mockMvc.perform(post("/api/operations/debit")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(debitDTO)))
                 .andExpect(status().isOk());
@@ -52,6 +58,7 @@ public class OperationRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldReturnNotFoundForDebitWhenAccountNotFound() throws Exception {
         DebitDTO debitDTO = new DebitDTO();
         debitDTO.setAccountId("non-existent");
@@ -62,12 +69,14 @@ public class OperationRestControllerTest {
             .when(bankAccountService).debit(anyString(), anyDouble(), anyString());
 
         mockMvc.perform(post("/api/operations/debit")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(debitDTO)))
                 .andExpect(status().isNotFound());
     }
 
     @Test
+    @WithMockUser
     public void shouldReturnBadRequestForDebitWhenBalanceNotSufficient() throws Exception {
         DebitDTO debitDTO = new DebitDTO();
         debitDTO.setAccountId("ca-123");
@@ -78,12 +87,14 @@ public class OperationRestControllerTest {
             .when(bankAccountService).debit(anyString(), anyDouble(), anyString());
 
         mockMvc.perform(post("/api/operations/debit")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(debitDTO)))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
+    @WithMockUser
     public void shouldCreditAccount() throws Exception {
         CreditDTO creditDTO = new CreditDTO();
         creditDTO.setAccountId("ca-123");
@@ -93,6 +104,7 @@ public class OperationRestControllerTest {
         doNothing().when(bankAccountService).credit(anyString(), anyDouble(), anyString());
 
         mockMvc.perform(post("/api/operations/credit")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(creditDTO)))
                 .andExpect(status().isOk());
@@ -101,6 +113,7 @@ public class OperationRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldTransferBetweenAccounts() throws Exception {
         TransferDTO transferDTO = new TransferDTO();
         transferDTO.setAccountSource("ca-123");
@@ -110,6 +123,7 @@ public class OperationRestControllerTest {
         doNothing().when(bankAccountService).transfer(anyString(), anyString(), anyDouble());
 
         mockMvc.perform(post("/api/operations/transfer")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(transferDTO)))
                 .andExpect(status().isOk());

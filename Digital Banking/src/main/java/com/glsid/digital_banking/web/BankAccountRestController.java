@@ -13,9 +13,8 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/accounts")
+@RequestMapping("/accounts")
 @Tag(name = "Bank Account Management")
-@CrossOrigin("*")
 public class BankAccountRestController {
     private BankAccountService bankAccountService;
 

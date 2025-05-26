@@ -1,0 +1,77 @@
+.dashboard-root {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.dashboard-cards {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+mat-card {
+  flex: 1 1 180px;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 12px;
+  text-align: center;
+  border-radius: 16px;
+}
+
+.card-title {
+  margin-top: 8px;
+  font-size: 1.1rem;
+  color: var(--banking-text-secondary, #757575);
+}
+
+.card-value {
+  margin-top: 4px;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--banking-primary, #1976d2);
+}
+
+.dashboard-actions {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.dashboard-section {
+  margin-top: 16px;
+}
+
+.dashboard-section h3 {
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+table {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.dashboard-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+}
+
+@media (max-width: 900px) {
+  .dashboard-cards {
+    flex-direction: column;
+    gap: 16px;
+  }
+  mat-card {
+    min-width: 140px;
+    padding: 16px 8px;
+  }
+  .dashboard-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

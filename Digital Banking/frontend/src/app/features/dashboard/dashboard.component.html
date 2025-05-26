@@ -1,0 +1,84 @@
+<div *ngIf="isLoading" class="dashboard-loading">
+  <mat-spinner></mat-spinner>
+</div>
+<div *ngIf="!isLoading && stats" class="dashboard-root">
+  <!-- Account Summary Cards -->
+  <div class="dashboard-cards">
+    <mat-card>
+      <mat-icon color="primary">people</mat-icon>
+      <div class="card-title">Customers</div>
+      <div class="card-value">{{ stats.totalCustomers }}</div>
+    </mat-card>
+    <mat-card>
+      <mat-icon color="primary">account_balance</mat-icon>
+      <div class="card-title">Accounts</div>
+      <div class="card-value">{{ stats.totalAccounts }}</div>
+    </mat-card>
+    <mat-card>
+      <mat-icon color="primary">savings</mat-icon>
+      <div class="card-title">Total Balance</div>
+      <div class="card-value">{{ stats.totalBalance | currency }}</div>
+    </mat-card>
+    <mat-card>
+      <mat-icon color="primary">swap_horiz</mat-icon>
+      <div class="card-title">Today's Operations</div>
+      <div class="card-value">{{ stats.todayOperations }}</div>
+    </mat-card>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="dashboard-actions">
+    <button mat-raised-button color="primary" (click)="quickAction('transfer')">
+      <mat-icon>send</mat-icon> Transfer
+    </button>
+    <button mat-raised-button color="accent" (click)="quickAction('deposit')">
+      <mat-icon>add</mat-icon> Deposit
+    </button>
+    <button mat-raised-button color="warn" (click)="quickAction('withdraw')">
+      <mat-icon>remove</mat-icon> Withdraw
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- Account Type Distribution Chart -->
+  <div class="dashboard-section">
+    <h3>Account Type Distribution</h3>
+    <canvas id="accountTypeChart"></canvas>
+  </div>
+
+  <!-- Transaction History Chart -->
+  <div class="dashboard-section">
+    <h3>Transaction History</h3>
+    <canvas id="transactionHistoryChart"></canvas>
+  </div>
+
+  <!-- Recent Transactions List -->
+  <div class="dashboard-section">
+    <h3>Recent Transactions</h3>
+    <table mat-table [dataSource]="stats.recentOperations" class="mat-elevation-z1">
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let op">{{ op.date | date:'shortDate' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>Type</th>
+        <td mat-cell *matCellDef="let op">{{ op.type }}</td>
+      </ng-container>
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef>Amount</th>
+        <td mat-cell *matCellDef="let op">{{ op.amount | currency }}</td>
+      </ng-container>
+      <ng-container matColumnDef="account">
+        <th mat-header-cell *matHeaderCellDef>Account</th>
+        <td mat-cell *matCellDef="let op">{{ op.accountNumber }}</td>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>Description</th>
+        <td mat-cell *matCellDef="let op">{{ op.description }}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

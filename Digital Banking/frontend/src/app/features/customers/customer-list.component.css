@@ -1,0 +1,16 @@
+.customer-list-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+mat-form-field {
+  flex: 1 1 300px;
+}
+
+table {
+  width: 100%;
+  margin-bottom: 8px;
+}

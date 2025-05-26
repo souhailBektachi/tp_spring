@@ -1,0 +1,7 @@
+mat-card {
+  max-width: 500px;
+  margin: 24px auto;
+}
+mat-card-content > div {
+  margin-bottom: 8px;
+}

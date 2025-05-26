@@ -1,0 +1,40 @@
+<mat-sidenav-container class="main-container">
+  <mat-sidenav #sidenav [(opened)]="sidebarOpened" mode="side" class="sidebar" fixedInViewport>
+    <div class="sidebar-header">
+      <span class="logo">BankingApp</span>
+      <button mat-icon-button (click)="toggleSidebar()" class="sidebar-toggle">
+        <mat-icon>menu_open</mat-icon>
+      </button>
+    </div>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active"><mat-icon>dashboard</mat-icon> Dashboard</a>
+      <a mat-list-item routerLink="/customers" routerLinkActive="active"><mat-icon>people</mat-icon> Customers</a>
+      <a mat-list-item routerLink="/accounts" routerLinkActive="active"><mat-icon>account_balance</mat-icon> Accounts</a>
+      <a mat-list-item routerLink="/transactions" routerLinkActive="active"><mat-icon>swap_horiz</mat-icon> Transactions</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="main-toolbar">
+      <button mat-icon-button (click)="toggleSidebar()" class="mobile-toggle">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="toolbar-title">Digital Banking</span>
+      <app-breadcrumbs class="breadcrumbs"></app-breadcrumbs>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="toggleTheme()" [attr.aria-label]="'Toggle theme'">
+        <mat-icon>{{ darkMode ? 'dark_mode' : 'light_mode' }}</mat-icon>
+      </button>
+      <button mat-icon-button [matMenuTriggerFor]="profileMenu" aria-label="User menu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #profileMenu="matMenu">
+        <button mat-menu-item routerLink="/profile"><mat-icon>settings</mat-icon> Account Settings</button>
+        <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon> Logout</button>
+      </mat-menu>
+    </mat-toolbar>
+    <div class="main-content">
+      <router-outlet />
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

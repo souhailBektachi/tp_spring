@@ -1,0 +1,17 @@
+.breadcrumbs-nav {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: var(--banking-text-secondary, #757575);
+}
+
+.breadcrumbs-nav a {
+  color: var(--banking-primary, #1976d2);
+  text-decoration: none;
+  margin-right: 4px;
+}
+
+.separator {
+  margin: 0 4px;
+  color: #bdbdbd;
+}

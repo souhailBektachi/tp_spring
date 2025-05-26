@@ -1,0 +1,22 @@
+<mat-card *ngIf="customer">
+  <mat-card-title>{{ customer.name }}</mat-card-title>
+  <mat-card-content>
+    <div>Email: {{ customer.email }}</div>
+    <div>Phone: {{ customer.phone }}</div>
+    <div>Address: {{ customer.address }}</div>
+    <div>Accounts:</div>
+    <ul>
+      <li *ngFor="let acc of accounts">
+        {{ acc.accountNumber }} - {{ acc.type }} - {{ acc.balance | currency }}
+      </li>
+    </ul>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="accent" (click)="editCustomer()">
+      <mat-icon>edit</mat-icon> Edit
+    </button>
+    <button mat-raised-button color="warn" (click)="deleteCustomer()">
+      <mat-icon>delete</mat-icon> Delete
+    </button>
+  </mat-card-actions>
+</mat-card>

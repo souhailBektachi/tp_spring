@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -21,12 +23,14 @@ import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BankAccountRestController.class)
+@Import(TestSecurityConfig.class)
 public class BankAccountRestControllerTest {
 
     @Autowired
@@ -69,6 +73,7 @@ public class BankAccountRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldReturnAllAccounts() throws Exception {
         given(bankAccountService.bankAccountList()).willReturn(accounts);
 
@@ -83,6 +88,7 @@ public class BankAccountRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldReturnAccountById() throws Exception {
         String accountId = "ca-123";
         
@@ -97,6 +103,7 @@ public class BankAccountRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldReturn404WhenAccountNotFound() throws Exception {
         String accountId = "non-existent";
         
@@ -109,6 +116,7 @@ public class BankAccountRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldReturnAccountOperations() throws Exception {
         String accountId = "ca-123";
         List<AccountOperationDTO> operations = Arrays.asList(
@@ -127,11 +135,13 @@ public class BankAccountRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldCreateCurrentAccount() throws Exception {
         given(bankAccountService.saveCurrentBankAccount(anyDouble(), anyDouble(), anyLong()))
             .willReturn(currentAccountDTO);
 
         mockMvc.perform(post("/api/accounts/current")
+                .with(csrf())
                 .param("initialBalance", "5000")
                 .param("overDraft", "2000")
                 .param("customerId", "1")
@@ -143,11 +153,13 @@ public class BankAccountRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldCreateSavingAccount() throws Exception {
         given(bankAccountService.saveSavingBankAccount(anyDouble(), anyDouble(), anyLong()))
             .willReturn(savingAccountDTO);
 
         mockMvc.perform(post("/api/accounts/saving")
+                .with(csrf())
                 .param("initialBalance", "10000")
                 .param("interestRate", "3.5")
                 .param("customerId", "1")

@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -18,14 +20,15 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CustomerRestController.class)
+@Import(TestSecurityConfig.class)
 public class CustomerRestControllerTest {
 
     @Autowired
@@ -48,6 +51,7 @@ public class CustomerRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldReturnAllCustomers() throws Exception {
         given(bankAccountService.listCustomers()).willReturn(customers);
 
@@ -60,6 +64,7 @@ public class CustomerRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldReturnCustomerById() throws Exception {
         Long customerId = 1L;
         CustomerDTO customer = new CustomerDTO(customerId, "John Doe", "john@example.com");
@@ -75,6 +80,7 @@ public class CustomerRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldReturn404WhenCustomerNotFound() throws Exception {
         Long customerId = 999L;
         
@@ -87,6 +93,7 @@ public class CustomerRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldCreateCustomer() throws Exception {
         CustomerDTO customerDTO = new CustomerDTO(null, "New Customer", "new@example.com");
         CustomerDTO savedCustomer = new CustomerDTO(3L, "New Customer", "new@example.com");
@@ -94,6 +101,7 @@ public class CustomerRestControllerTest {
         given(bankAccountService.saveCustomer(any(CustomerDTO.class))).willReturn(savedCustomer);
 
         mockMvc.perform(post("/api/customers")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(customerDTO)))
                 .andExpect(status().isOk())
@@ -102,6 +110,7 @@ public class CustomerRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldUpdateCustomer() throws Exception {
         Long customerId = 1L;
         CustomerDTO customerDTO = new CustomerDTO(null, "Updated Customer", "updated@example.com");
@@ -110,6 +119,7 @@ public class CustomerRestControllerTest {
         given(bankAccountService.updateCustomer(any(CustomerDTO.class))).willReturn(updatedCustomer);
 
         mockMvc.perform(put("/api/customers/{id}", customerId)
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(customerDTO)))
                 .andExpect(status().isOk())
@@ -118,12 +128,14 @@ public class CustomerRestControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldDeleteCustomer() throws Exception {
         Long customerId = 1L;
         
         doNothing().when(bankAccountService).deleteCustomer(customerId);
 
         mockMvc.perform(delete("/api/customers/{id}", customerId)
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
                 
